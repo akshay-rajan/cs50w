@@ -1,0 +1,90 @@
+{% extends "auctions/layout.html" %}
+
+{% block title %}
+    {{ listing.name }}
+{% endblock %}
+
+{% block body %}
+<div style="margin:10px;">
+    {% if not open %}
+        {% if not victory %}
+            <div class="alert alert-danger">
+                This auction has been closed!
+            </div>
+        {% else %}
+            <div class="winner alert alert-success">
+                Congratulations! You have won this auction!
+            </div>
+        {% endif %}
+    {% endif %}
+
+    <div>
+            <img src="{{ listing.image }}" alt="Image" class="mx-auto d-block" style="max-width:50%; max-height:300px;">
+            <h1>{{ listing.name }}</h1>
+            <h5><b>${{ listing.price }}</b></h5>
+            <br>
+            <h5>Category: <span class="badge badge-secondary">{{ category.category }}</span></h5>
+            <div>{{ bidcount }} bid(s) so far.</div>
+            <h6>Details</h6>
+            <i>{{ listing.details }}</i>
+            <br>
+            <br>
+            {% if open %}
+                <form action="{% url 'listing' listing.id %}" method="post">
+                    {% csrf_token %}
+                    {% if not close %}
+                        {{ form }}
+                        <div class="row" style="margin: 10px;">
+
+                            <div>
+                                <input type="submit" class="btn btn-primary" value="Place Bid">
+                            </div>
+                    {% else %}
+                        <div>
+                            <a href="{% url 'close' listing.id %}" class="btn btn-danger">Close Bid</a>
+                        </div>
+                    {% endif %}
+                    </div>
+
+                    <div class="text-right">
+                        {% if not in_watchlist %}
+                            <a href="{% url 'addtowatchlist' listing.id %}" style="margin-right: 10px" class="btn btn-info">Add to Watchlist</a>
+                        {% else %}
+                            <a href="{% url 'removefromwatchlist' listing.id %}" style="margin-right: 10px" class="btn btn-info">Remove from Watchlist</a>
+                        {% endif %}
+                    </div>
+
+                </form>
+            {% endif %}
+            <div>
+                <div class="row d-flex justify-content-center">
+                    <div class="col-md-12">
+                      <div class="card shadow-0 border" style="background-color: #f0f2f5;">
+                        <div class="card-body p-4">
+                            <div class="form-outline mb-4">
+                                <form action="{% url 'add_comment' listing.id %}" method="post">
+                                    {% csrf_token %}
+                                    {{ addcomment }}
+                                    <input type="submit" class="btn btn-primary" value="Add Comment">
+                                </form>
+                              </div>
+                        {% for comment in comments %}
+                          <div class="card mb-4">
+                            <div class="card-body">
+                              <p>{{ comment.comm }}</p>
+                              <div class="d-flex justify-content-between">
+                                <div class="d-flex flex-row align-items-center">
+                                  <p class="small mb-0 ms-2"><b>{{ comment.user }}</b></p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

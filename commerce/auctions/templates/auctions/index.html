@@ -1,0 +1,35 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>Active Listings</h2>
+
+    <div class="container">
+        <div class="row">
+            {% for listing in listings %}
+                <div class="col-sm-4">
+                    <div class="card-wrapper" id="card-w" style="border: 1px solid #ddd; padding: 10px; height:100%; display: flex; flex-direction: column; justify-content: space-between;">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-xl-6 col-lg-6 col-md-6" style="border:none;">
+                                    <img src="{{ listing.image }}" alt="thumbnail" class="img-fluid " style="width: 100%;">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-xl-6 col-lg-6 col-md-6" style="border:none;">
+                                    <a href="{% url 'listing' listing.id %}">
+                                        <h4 class="display-6">{{ listing.name }}</h4>
+                                    </a>
+                                    <h5><b>${{ listing.price }}</b></h5>
+                                    {{ listing.details }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+{% endblock %}
