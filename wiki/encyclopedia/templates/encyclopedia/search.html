@@ -1,0 +1,19 @@
+{% extends "encyclopedia/layout.html" %}
+
+{% block title %}
+    Search Results
+{% endblock %}
+
+{% block body %}
+
+    <h2>Matching Entries:</h2>
+    <ul class="list-group">
+        {% for name in entries %}
+            <li class="list-group-item list-group-item-action"><a href="{% url 'title' title=name %}">{{ name }}</a></li>
+        {% empty %}
+            <br>
+            <h3 id="noentry">No entries found :(</h3>
+        {% endfor %}
+    </ul>
+
+{% endblock %}
